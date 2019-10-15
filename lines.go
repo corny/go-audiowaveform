@@ -1,9 +1,11 @@
 package waveform
 
 type Line struct {
-	Count  int
-	SumMin int
-	SumMax int
+	Count   int
+	SumMin  int
+	SumMax  int
+	PeakMin int
+	PeakMax int
 }
 
 type Lines []Line
@@ -12,6 +14,13 @@ func (l *Line) add(s *Sample) {
 	l.Count++
 	l.SumMin += int(s.Minimum)
 	l.SumMax += int(s.Maximum)
+
+	if int(s.Minimum) < l.PeakMin {
+		l.PeakMin = int(s.Minimum)
+	}
+	if int(s.Maximum) > l.PeakMax {
+		l.PeakMax = int(s.Maximum)
+	}
 }
 
 func GenerateLines(wf *Waveform, linesCount int) Lines {

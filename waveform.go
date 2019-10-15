@@ -63,7 +63,7 @@ func (wf *Waveform) Samples() <-chan Sample {
 	return out
 }
 
-func (wf *Waveform) EachLine(lineCount int, callback func(min, max float32))  {
+func (wf *Waveform) EachLine(lineCount int, callback func(avgMin, avgMax, peakMin, peakMax float32)) {
 
 	lines := GenerateLines(wf, lineCount)
 	scaleFactor := float32(1) / lines.Max()
@@ -74,6 +74,8 @@ func (wf *Waveform) EachLine(lineCount int, callback func(min, max float32))  {
 		callback(
 			scaleFactor*float32(l.SumMin)/float32(l.Count),
 			scaleFactor*float32(l.SumMax)/float32(l.Count),
+			scaleFactor*float32(l.PeakMin),
+			scaleFactor*float32(l.PeakMax),
 		)
 	}
 }
